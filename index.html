@@ -38,19 +38,21 @@
                             bg: '#fff5f7'
                         },
                         tg: {
-                            bg: '#17212b',
-                            header: '#242f3d',
+                            bg: '#0e1621',
+                            header: '#17212b',
                             msg: '#2b5278',
                             text: '#ffffff',
-                            link: '#50b5ff'
+                            link: '#50b5ff',
+                            secondary: '#6c7883'
                         }
                     },
                     animation: {
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'typewriter': 'blink 1s step-end infinite',
-                        'slide-up': 'slideUp 0.5s ease-out forwards',
-                        'pop-in': 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                        'slide-down': 'slideDown 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'tap': 'tapGesture 0.5s ease-in-out',
                     },
                     keyframes: {
                         float: {
@@ -61,13 +63,18 @@
                             '0%, 100%': { opacity: '1' },
                             '50%': { opacity: '0' },
                         },
-                        slideUp: {
-                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-20px)', opacity: '0' },
                             '100%': { transform: 'translateY(0)', opacity: '1' },
                         },
-                        popIn: {
-                            '0%': { transform: 'scale(0.8)', opacity: '0' },
-                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        tapGesture: {
+                            '0%': { transform: 'scale(1)', opacity: '0.5' },
+                            '50%': { transform: 'scale(0.8)', opacity: '1' },
+                            '100%': { transform: 'scale(1)', opacity: '0' },
                         }
                     }
                 }
@@ -100,9 +107,9 @@
             transform: perspective(1000px);
         }
         
-        /* Mobile Frame */
+        /* iPhone Bezel */
         .iphone-mockup {
-            box-shadow: 0 0 0 12px #2d3748, 0 0 0 14px #4a5568, 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 0 0 12px #1f2937, 0 0 0 14px #374151, 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
         
         /* Telegram Bubble Tail */
@@ -134,6 +141,12 @@
             opacity: 1;
             transform: translateY(0);
         }
+        
+        /* Feature Card Mockups */
+        .mockup-header {
+            display: flex; gap: 4px; padding-bottom: 8px; border-bottom: 1px solid rgba(0,0,0,0.05); margin-bottom: 8px;
+        }
+        .mockup-dot { width: 8px; height: 8px; border-radius: 50%; }
     </style>
 </head>
 <body class="text-gray-800 dark:text-gray-100 transition-colors duration-300 antialiased overflow-x-hidden">
@@ -149,7 +162,7 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="#features" class="font-medium hover:text-kw-red dark:hover:text-kw-light transition-colors">기능소개</a>
                     <a href="#how-it-works" class="font-medium hover:text-kw-red dark:hover:text-kw-light transition-colors">작동원리</a>
-                    <a href="#comparison" class="font-medium hover:text-kw-red dark:hover:text-kw-light transition-colors">앱 vs 봇</a>
+                    <a href="#comparison" class="font-medium hover:text-kw-red dark:hover:text-kw-light transition-colors">비교하기</a>
                     <a href="https://github.com/viban0/web-monitor" target="_blank" class="text-2xl hover:text-gray-600 dark:hover:text-gray-300 transition-transform hover:scale-110">
                         <i class="ri-github-fill"></i>
                     </a>
@@ -165,7 +178,7 @@
             <div class="px-4 pt-2 pb-6 space-y-2">
                 <a href="#features" class="block px-3 py-3 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800">기능소개</a>
                 <a href="#how-it-works" class="block px-3 py-3 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800">작동원리</a>
-                <a href="#comparison" class="block px-3 py-3 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800">앱 vs 봇</a>
+                <a href="#comparison" class="block px-3 py-3 rounded-md text-base font-medium hover:bg-gray-100 dark:hover:bg-gray-800">비교하기</a>
             </div>
         </div>
     </nav>
@@ -211,8 +224,8 @@
                         </div>
                         <div class="w-px h-10 bg-gray-200 dark:bg-gray-800"></div>
                         <div>
-                            <p class="text-3xl font-bold text-gray-900 dark:text-white">0.5s</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">평균 알림 속도</p>
+                            <p class="text-3xl font-bold text-gray-900 dark:text-white">30min</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">알림 주기</p>
                         </div>
                         <div class="w-px h-10 bg-gray-200 dark:bg-gray-800"></div>
                         <div>
@@ -222,50 +235,66 @@
                     </div>
                 </div>
 
-                <!-- 3D Phone Mockup (Interactive) -->
-                <div class="flex-1 w-full max-w-md mx-auto lg:max-w-full relative perspective-1000 reveal delay-200">
-                    <div class="iphone-mockup relative mx-auto border-gray-800 dark:border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl animate-float overflow-hidden">
-                        <!-- Notch -->
-                        <div class="h-[32px] w-[3px] bg-gray-800 absolute -left-[17px] top-[72px] rounded-l-lg"></div>
-                        <div class="h-[46px] w-[3px] bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
-                        <div class="h-[46px] w-[3px] bg-gray-800 absolute -left-[17px] top-[178px] rounded-l-lg"></div>
-                        <div class="h-[64px] w-[3px] bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
+                <!-- 3D iPhone Mockup (Animated) -->
+                <div class="flex-1 w-full max-w-md mx-auto lg:max-w-full relative perspective-1000 reveal delay-200 flex justify-center">
+                    <div class="iphone-mockup relative bg-gray-900 border-[14px] border-gray-800 rounded-[3rem] h-[600px] w-[300px] shadow-2xl animate-float overflow-hidden z-10">
+                        <!-- Dynamic Island / Notch -->
+                        <div class="absolute top-0 inset-x-0 h-6 bg-gray-800 z-20 rounded-b-2xl w-32 mx-auto"></div>
                         
-                        <!-- Screen Content -->
-                        <div class="w-full h-full bg-[#17212b] overflow-hidden flex flex-col relative">
-                            <!-- Telegram Header -->
-                            <div class="bg-[#242f3d] p-4 flex items-center gap-3 border-b border-[#101921] z-10">
-                                <i class="ri-arrow-left-line text-white"></i>
-                                <div class="w-10 h-10 rounded-full overflow-hidden bg-white">
-                                    <img src="alert.jpeg" alt="Bot" class="w-full h-full object-cover">
-                                </div>
-                                <div class="flex-1">
-                                    <h3 class="text-white font-bold text-sm">광운대 알리미</h3>
-                                    <p class="text-[#8e9cb0] text-xs">bot</p>
-                                </div>
-                            </div>
+                        <!-- Screen Container -->
+                        <div id="iphone-screen" class="w-full h-full relative overflow-hidden bg-black font-sans">
                             
-                            <!-- Chat Area (Auto Scrolling Animation) -->
-                            <div class="flex-1 p-3 space-y-3 overflow-hidden relative" id="hero-chat-scroll">
-                                <div class="text-center my-4"><span class="bg-black/30 text-white text-xs px-3 py-1 rounded-full">Today</span></div>
+                            <!-- 1. Lock Screen View -->
+                            <div id="lock-screen" class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center flex flex-col items-center pt-16 transition-opacity duration-500">
+                                <div class="text-white text-6xl font-thin tracking-tight mb-2" id="lock-time">09:00</div>
+                                <div class="text-white text-lg font-medium opacity-80">1월 13일 화요일</div>
                                 
-                                <!-- Messages will be injected by JS for infinite loop -->
+                                <!-- Notification Item (Hidden initially) -->
+                                <div id="notification-item" class="mt-8 mx-4 bg-white/20 backdrop-blur-md rounded-2xl p-3 w-[90%] transform -translate-y-10 opacity-0 transition-all duration-500 cursor-pointer shadow-lg">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <div class="w-5 h-5 bg-blue-500 rounded-md flex items-center justify-center">
+                                            <i class="ri-telegram-fill text-white text-xs"></i>
+                                        </div>
+                                        <span class="text-white text-xs font-bold uppercase">Telegram</span>
+                                        <span class="text-gray-200 text-xs ml-auto">now</span>
+                                    </div>
+                                    <div class="text-white font-semibold text-sm mb-0.5">광운대 알리미</div>
+                                    <div class="text-gray-100 text-sm truncate">📢 [공지] 2026학년도 1학기 장학금...</div>
+                                </div>
+                                
+                                <!-- Tap Hint Finger -->
+                                <div id="tap-finger" class="absolute top-[180px] left-1/2 -ml-6 w-12 h-12 bg-white/50 rounded-full z-30 opacity-0 pointer-events-none"></div>
                             </div>
-                            
-                            <!-- Input Area -->
-                            <div class="bg-[#242f3d] p-3 flex items-center gap-3">
-                                <i class="ri-attachment-2 text-[#8e9cb0] text-xl"></i>
-                                <div class="flex-1 bg-[#17212b] h-9 rounded-full"></div>
-                                <i class="ri-mic-fill text-[#8e9cb0] text-xl"></i>
-                            </div>
-                            
-                            <!-- Finger Hint -->
-                            <div class="absolute bottom-20 right-10 z-20 pointer-events-none">
-                                <div class="w-12 h-12 bg-white/20 rounded-full animate-ping absolute"></div>
-                                <div class="w-12 h-12 bg-white/80 rounded-full flex items-center justify-center text-2xl shadow-lg backdrop-blur-sm cursor-pointer transition-transform hover:scale-110" id="demo-trigger">
-                                    👆
+
+                            <!-- 2. Telegram App View -->
+                            <div id="telegram-app" class="absolute inset-0 bg-[#0e1621] flex flex-col opacity-0 transition-opacity duration-500">
+                                <!-- App Header -->
+                                <div class="bg-[#17212b] p-3 pt-10 flex items-center gap-3 border-b border-black/20 shrink-0">
+                                    <i class="ri-arrow-left-line text-white"></i>
+                                    <div class="w-9 h-9 rounded-full bg-white overflow-hidden">
+                                        <img src="alert.jpeg" alt="Bot" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="text-white font-bold text-sm">광운대 알리미</h3>
+                                        <p class="text-[#6c7883] text-xs">bot</p>
+                                    </div>
+                                </div>
+
+                                <!-- Chat Area -->
+                                <div class="flex-1 p-3 space-y-3 overflow-y-auto" id="app-chat-area">
+                                    <!-- Messages injected via JS -->
+                                </div>
+
+                                <!-- Input Bar -->
+                                <div class="bg-[#17212b] p-3 flex items-center gap-3 shrink-0 pb-6">
+                                    <i class="ri-attachment-2 text-[#6c7883] text-xl"></i>
+                                    <div class="flex-1 bg-[#0e1621] h-9 rounded-full px-4 flex items-center text-[#6c7883] text-sm">
+                                        방송하기...
+                                    </div>
+                                    <i class="ri-mic-fill text-[#6c7883] text-xl"></i>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -287,53 +316,93 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Feature 1: Notice -->
-                <div class="group relative bg-gray-50 dark:bg-gray-800 rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 tilt-card reveal cursor-pointer" onclick="openChat('notice')">
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div class="p-8 pb-0 flex justify-center bg-gray-100 dark:bg-gray-700/50">
-                        <img src="screenshot.png" alt="Notice" class="w-48 shadow-lg rounded-t-xl transform group-hover:scale-105 transition-transform duration-300 origin-bottom">
+                <!-- Feature 1: Notice (Custom UI Mockup) -->
+                <div class="group relative bg-gray-50 dark:bg-gray-800 rounded-3xl overflow-hidden hover:border-kw-red border-2 border-transparent transition-all duration-300 tilt-card reveal cursor-pointer shadow-lg" onclick="openChat('notice')">
+                    <!-- UI Mockup Area -->
+                    <div class="h-48 bg-gray-100 dark:bg-gray-700 p-4 flex flex-col justify-center items-center overflow-hidden relative">
+                        <!-- Mock Notice List -->
+                        <div class="w-4/5 bg-white dark:bg-gray-800 rounded-lg shadow-md p-3 space-y-2 transform group-hover:-translate-y-2 transition-transform duration-300">
+                            <div class="flex items-center gap-2">
+                                <span class="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded">NEW</span>
+                                <div class="h-2 w-2/3 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                            </div>
+                            <div class="h-2 w-full bg-gray-100 dark:bg-gray-700 rounded"></div>
+                            <div class="h-2 w-4/5 bg-gray-100 dark:bg-gray-700 rounded"></div>
+                        </div>
+                        <div class="w-4/5 bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3 mt-2 opacity-50">
+                            <div class="flex items-center gap-2">
+                                <div class="h-2 w-1/2 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                            </div>
+                        </div>
                     </div>
+                    
                     <div class="p-8 relative z-10">
-                        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                        <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-4">
                             👀
                         </div>
                         <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2">실시간 공지 알림</h4>
                         <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                            장학금, 공모전 기간 놓쳐서 후회한 적 있나요? 키워드 분석을 통해 중요한 공지만 쏙쏙 골라 즉시 알려드립니다.
+                            키워드 분석을 통해 중요한 공지만 쏙쏙 골라 알려드립니다. 장학금 놓치지 마세요!
                         </p>
                     </div>
                 </div>
 
-                <!-- Feature 2: Calendar -->
-                <div class="group relative bg-gray-50 dark:bg-gray-800 rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 tilt-card reveal delay-100 cursor-pointer" onclick="openChat('calendar')">
-                    <div class="absolute inset-0 bg-gradient-to-br from-red-500/10 to-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div class="p-8 pb-0 flex justify-center bg-gray-100 dark:bg-gray-700/50">
-                        <img src="excal.png" alt="Calendar" class="w-48 shadow-lg rounded-t-xl transform group-hover:scale-105 transition-transform duration-300 origin-bottom">
+                <!-- Feature 2: Calendar (Custom UI Mockup) -->
+                <div class="group relative bg-gray-50 dark:bg-gray-800 rounded-3xl overflow-hidden hover:border-kw-red border-2 border-transparent transition-all duration-300 tilt-card reveal delay-100 cursor-pointer shadow-lg" onclick="openChat('calendar')">
+                    <!-- UI Mockup Area -->
+                    <div class="h-48 bg-gray-100 dark:bg-gray-700 p-4 flex justify-center items-center overflow-hidden">
+                        <!-- Mock Calendar -->
+                        <div class="w-48 bg-white dark:bg-gray-800 rounded-xl shadow-md p-3 transform group-hover:scale-105 transition-transform duration-300">
+                            <div class="flex justify-between items-end mb-2 border-b dark:border-gray-700 pb-1">
+                                <span class="text-xl font-bold text-gray-800 dark:text-white">13</span>
+                                <span class="text-xs text-gray-400">Tue</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-red-400"></div>
+                                    <div class="h-1.5 w-20 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <div class="w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+                                    <div class="h-1.5 w-16 bg-gray-200 dark:bg-gray-600 rounded"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="p-8 relative z-10">
-                        <div class="w-12 h-12 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                        <div class="w-12 h-12 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center text-2xl mb-4">
                             📅
                         </div>
                         <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2">학사일정 브리핑</h4>
                         <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                            "아 맞다 수강신청!" 이제 그만. 매일 아침 9시, 오늘의 학사일정과 D-Day를 브리핑해드립니다.
+                            매일 아침 9시, 오늘의 학사일정과 D-Day를 브리핑해드립니다. 수강신청 기간 완벽 대비!
                         </p>
                     </div>
                 </div>
 
-                <!-- Feature 3: Food -->
-                <div class="group relative bg-gray-50 dark:bg-gray-800 rounded-3xl overflow-hidden hover:shadow-2xl transition-all duration-300 tilt-card reveal delay-200 cursor-pointer" onclick="openChat('food')">
-                    <div class="absolute inset-0 bg-gradient-to-br from-green-500/10 to-teal-500/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    <div class="p-8 pb-0 flex justify-center bg-gray-100 dark:bg-gray-700/50">
-                        <img src="diet.png" alt="Food" class="w-48 shadow-lg rounded-t-xl transform group-hover:scale-105 transition-transform duration-300 origin-bottom">
+                <!-- Feature 3: Food (Custom UI Mockup) -->
+                <div class="group relative bg-gray-50 dark:bg-gray-800 rounded-3xl overflow-hidden hover:border-kw-red border-2 border-transparent transition-all duration-300 tilt-card reveal delay-200 cursor-pointer shadow-lg" onclick="openChat('food')">
+                    <!-- UI Mockup Area -->
+                    <div class="h-48 bg-gray-100 dark:bg-gray-700 p-4 flex justify-center items-center overflow-hidden">
+                        <!-- Mock Menu Card -->
+                        <div class="w-44 bg-white dark:bg-gray-800 rounded-xl shadow-md p-3 relative transform group-hover:rotate-2 transition-transform duration-300">
+                            <div class="absolute -top-1 -right-1 bg-yellow-400 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">★</div>
+                            <div class="text-center mb-2 font-bold text-gray-700 dark:text-gray-200 text-sm">함지마루</div>
+                            <div class="space-y-1">
+                                <div class="bg-orange-50 dark:bg-gray-700 p-1 rounded text-xs text-center text-gray-600 dark:text-gray-300">돈까스 & 쫄면</div>
+                                <div class="bg-gray-50 dark:bg-gray-700 p-1 rounded text-xs text-center text-gray-600 dark:text-gray-300">어묵우동</div>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="p-8 relative z-10">
-                        <div class="w-12 h-12 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform">
+                        <div class="w-12 h-12 bg-green-100 text-green-600 rounded-2xl flex items-center justify-center text-2xl mb-4">
                             🍱
                         </div>
                         <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-2">오늘의 학식</h4>
                         <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                            함지마루 갈까 말까 고민할 시간에 메뉴부터 확인하세요. 맛있는 메뉴가 나오면 이모지로 반응해보세요!
+                            함지마루 갈까 말까 고민할 시간에 메뉴부터 확인하세요. 맛있는 메뉴엔 이모지로 반응해보세요!
                         </p>
                     </div>
                 </div>
@@ -350,7 +419,7 @@
                     어떻게 동작하나요?
                 </h3>
                 <p class="text-gray-600 dark:text-gray-400">
-                    별도의 서버 없이 GitHub Actions를 활용한 Serverless 구조로 24시간 끊김 없이 동작합니다.
+                    별도의 서버 없이 GitHub Actions를 활용한 Serverless 구조로 동작합니다.
                 </p>
             </div>
 
@@ -365,9 +434,9 @@
                             ⏰
                         </div>
                         <h4 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">Scheduling</h4>
-                        <div class="inline-block px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs font-mono text-gray-500 mb-4">Cron Job</div>
+                        <div class="inline-block px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs font-mono text-gray-500 mb-4">Cron Job (30m)</div>
                         <p class="text-sm text-gray-500 dark:text-gray-400">
-                            GitHub Actions가 지정된 주기마다 트리거되어 가상 환경을 실행합니다.
+                            <b>30분 주기</b>로 GitHub Actions가 트리거되어, 업데이트가 있는지 확인합니다.
                         </p>
                     </div>
 
@@ -418,7 +487,7 @@
                         <i class="ri-smartphone-line text-9xl"></i>
                     </div>
                     <div class="relative z-10">
-                        <h4 class="text-2xl font-bold mb-1 text-gray-900 dark:text-white">KW 알리미 (APP)</h4>
+                        <h4 class="text-2xl font-bold mb-1 text-gray-900 dark:text-white">KW 알리미</h4>
                         <span class="text-xs font-bold bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded">Since 2019 • 선배님 작품</span>
                         
                         <ul class="mt-6 space-y-4">
@@ -444,8 +513,7 @@
                         <i class="ri-robot-line text-9xl text-kw-red"></i>
                     </div>
                     <div class="relative z-10">
-                        <div class="absolute -top-6 -right-6 bg-kw-red text-white text-xs font-bold px-4 py-2 rotate-12 shadow-md">WINNER?</div>
-                        <h4 class="text-2xl font-bold mb-1 text-gray-900 dark:text-white">광운대 알리미 (BOT)</h4>
+                        <h4 class="text-2xl font-bold mb-1 text-gray-900 dark:text-white">광운대 알리미</h4>
                         <span class="text-xs font-bold bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-300 px-2 py-1 rounded">Since 2026 • 새내기 작품</span>
                         
                         <ul class="mt-6 space-y-4">
@@ -459,7 +527,7 @@
                             </li>
                             <li class="flex items-start">
                                 <i class="ri-close-line text-red-500 mr-2 mt-1"></i>
-                                <span class="text-sm text-gray-600 dark:text-gray-400">단순 기능 (채팅밖에 못함)</span>
+                                <span class="text-sm text-gray-600 dark:text-gray-400"><b>최대 30분 알림 지연</b> (Cron 주기)</span>
                             </li>
                         </ul>
                     </div>
@@ -508,9 +576,6 @@
                     <h4 class="text-lg font-bold mb-6">Contact</h4>
                     <ul class="space-y-4 text-sm text-gray-400">
                         <li class="flex items-center gap-2">
-                            <i class="ri-mail-line"></i> dev.viban0@gmail.com
-                        </li>
-                        <li class="flex items-center gap-2">
                             <i class="ri-map-pin-line"></i> Kwangwoon Univ.
                         </li>
                         <li>
@@ -544,10 +609,10 @@
         <!-- Modal Panel -->
         <div class="fixed inset-0 z-10 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-2xl bg-[#17212b] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md w-full border border-gray-700">
+                <div class="relative transform overflow-hidden rounded-2xl bg-[#0e1621] text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-md w-full border border-gray-700">
                     
                     <!-- Header -->
-                    <div class="bg-[#242f3d] px-4 py-3 flex items-center gap-4 border-b border-black/20">
+                    <div class="bg-[#17212b] px-4 py-3 flex items-center gap-4 border-b border-black/20">
                         <button onclick="closeChat()" class="text-white hover:bg-white/10 p-2 rounded-full transition-colors">
                             <i class="ri-arrow-left-line text-xl"></i>
                         </button>
@@ -555,19 +620,19 @@
                             <img src="alert.jpeg" alt="Bot Profile" class="w-10 h-10 rounded-full bg-white object-cover">
                             <div>
                                 <h3 class="text-white font-bold text-sm">광운대 알리미</h3>
-                                <p class="text-[#8e9cb0] text-xs">1,240 subscribers</p>
+                                <p class="text-[#6c7883] text-xs">1,240 subscribers</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Chat Body -->
-                    <div id="modalChatBody" class="h-[400px] overflow-y-auto p-4 space-y-3 bg-[#0e1621] bg-opacity-95" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%2317212b\' fill-opacity=\'0.4\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');">
+                    <div id="modalChatBody" class="h-[400px] overflow-y-auto p-4 space-y-3 bg-[#0e1621] bg-opacity-95">
                         <!-- Messages injected via JS -->
                     </div>
 
                     <!-- Footer -->
-                    <div class="bg-[#242f3d] px-4 py-3 flex items-center gap-3 border-t border-black/20">
-                        <div class="text-[#8e9cb0] text-center w-full text-xs">
+                    <div class="bg-[#17212b] px-4 py-3 flex items-center gap-3 border-t border-black/20">
+                        <div class="text-[#6c7883] text-center w-full text-xs">
                             MUTE | BROADCAST
                         </div>
                     </div>
@@ -644,49 +709,99 @@
         }
 
 
-        // === 4. Hero Phone Chat Loop Logic ===
-        const heroChatBody = document.getElementById('hero-chat-scroll');
-        const demoMessages = [
-            { type: 'notice', text: "📢 [장학] 2026학년도 1학기 국가장학금 2차 신청 안내" },
-            { type: 'food', text: "🍱 [학식] 오늘 함지마루 점심: 돈까스 & 쫄면" },
-            { type: 'calendar', text: "📅 [학사] 수강신청 장바구니 담기 D-1" },
-            { type: 'notice', text: "🔥 [일반] 축제 라인업 공개! (뉴진스 옴?)" }
+        // === 4. iPhone Animation Loop ===
+        const lockScreen = document.getElementById('lock-screen');
+        const notificationItem = document.getElementById('notification-item');
+        const tapFinger = document.getElementById('tap-finger');
+        const telegramApp = document.getElementById('telegram-app');
+        const appChatArea = document.getElementById('app-chat-area');
+        
+        function updateLockTime() {
+            const now = new Date();
+            document.getElementById('lock-time').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', hour12: false});
+        }
+        setInterval(updateLockTime, 1000);
+        updateLockTime();
+
+        // Chat Data for iPhone Animation
+        const iphoneChatData = [
+            { type: 'divider', text: 'Today' },
+            { type: 'bot', text: '☀️ <b>[모닝 브리핑]</b><br>오늘의 학사일정이 없습니다.<br>오늘도 좋은 하루 되세요! 😊' },
+            { type: 'bot', text: '📢 <b>[공지] 2026학년도 1학기 수강신청 안내</b><br><br>일시: 2026.02.10(화) 10:00 ~<br>대상: 전체 재학생<br><a href="#" style="color:#50b5ff">👉 공지사항 바로가기</a>', reactions: ['🔥 12', '👍 8'] },
+            { type: 'bot', text: '🍱 <b>[학식] 함지마루 점심</b><br>- 돈까스 & 쫄면<br>- 어묵우동' },
         ];
 
-        function createMessageBubble(text) {
+        function createBubble(html, reactions = []) {
+            let reactionHtml = '';
+            if (reactions.length > 0) {
+                reactionHtml = `<div class="flex gap-1 mt-2">${reactions.map(r => `<span class="bg-[#242f3d] text-xs px-2 py-1 rounded-full text-white cursor-pointer hover:bg-[#2f3e4e]">${r}</span>`).join('')}</div>`;
+            }
+            
             const div = document.createElement('div');
             div.className = 'bg-[#2b5278] text-white p-3 rounded-tr-xl rounded-tl-xl rounded-bl-xl rounded-br-sm shadow-sm text-sm relative bubble-tail animate-slide-up max-w-[90%] ml-auto mb-2';
-            div.innerHTML = `${text}<span class="text-[10px] text-blue-200 block text-right mt-1">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</span>`;
+            div.innerHTML = `${html}${reactionHtml}<span class="text-[10px] text-[#6c7883] block text-right mt-1 ml-2 float-right relative top-1">${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', hour12:false})}</span>`;
             return div;
         }
 
-        let msgIndex = 0;
-        function runHeroChatLoop() {
-            if(msgIndex >= demoMessages.length) msgIndex = 0;
-            const msg = demoMessages[msgIndex];
-            const bubble = createMessageBubble(msg.text);
-            heroChatBody.appendChild(bubble);
-            
-            // Auto scroll to bottom
-            heroChatBody.scrollTo({ top: heroChatBody.scrollHeight, behavior: 'smooth' });
+        async function playIphoneAnimation() {
+            // Reset State
+            lockScreen.style.opacity = '1';
+            telegramApp.style.opacity = '0';
+            notificationItem.style.opacity = '0';
+            notificationItem.style.transform = 'translateY(-2.5rem)';
+            appChatArea.innerHTML = ''; 
 
-            // Remove old messages to keep DOM light
-            if(heroChatBody.children.length > 10) {
-                heroChatBody.removeChild(heroChatBody.children[1]); // Keep "Today" divider
+            // 1. Wait on Lock Screen
+            await new Promise(r => setTimeout(r, 1000));
+
+            // 2. Show Notification
+            notificationItem.style.opacity = '1';
+            notificationItem.style.transform = 'translateY(0)';
+            
+            await new Promise(r => setTimeout(r, 1500));
+
+            // 3. Tap Interaction
+            tapFinger.style.opacity = '1';
+            tapFinger.classList.add('animate-tap');
+            
+            await new Promise(r => setTimeout(r, 500)); // Wait for tap mid-point
+            
+            // 4. Transition to App
+            lockScreen.style.opacity = '0';
+            telegramApp.style.opacity = '1';
+            tapFinger.style.opacity = '0';
+            tapFinger.classList.remove('animate-tap');
+
+            // 5. Populate Chat
+            for (const item of iphoneChatData) {
+                await new Promise(r => setTimeout(r, 600));
+                if (item.type === 'divider') {
+                    const div = document.createElement('div');
+                    div.className = 'text-center my-2';
+                    div.innerHTML = `<span class="bg-black/20 text-white/60 text-xs px-3 py-1 rounded-full">${item.text}</span>`;
+                    appChatArea.appendChild(div);
+                } else {
+                    const bubble = createBubble(item.text, item.reactions);
+                    appChatArea.appendChild(bubble);
+                    appChatArea.scrollTop = appChatArea.scrollHeight;
+                }
             }
 
-            msgIndex++;
-            setTimeout(runHeroChatLoop, 2500);
+            // 6. Wait and Reset
+            await new Promise(r => setTimeout(r, 5000));
+            playIphoneAnimation(); // Loop
         }
-        setTimeout(runHeroChatLoop, 1000);
+        
+        // Start Animation Loop
+        playIphoneAnimation();
 
 
         // === 5. Modal Logic & Data ===
         const chatScenarios = {
             'notice': [
                 { text: "📢 <b>[일반] 2026학년도 1학기 행복기숙사 입사자 모집</b>", delay: 300 },
-                { text: "작성일: 2026-01-09 | 생활관<br><a href='#' class='text-[#50b5ff] hover:underline'>👉 공지 바로가기</a>", delay: 800 },
-                { text: "💰 <b>(장학) 인산장학회 장학생 선발 안내(2차)</b>", delay: 1800 },
+                { text: "작성일: 2026-01-09 | 생활관<br><a href='#' class='text-[#50b5ff] hover:underline'>👉 공지 바로가기</a>", delay: 800, reactions: ['👍 42'] },
+                { text: "💰 <b>(장학) 인산장학회 장학생 선발 안내(2차)</b>", delay: 1800, reactions: ['🔥 108'] },
             ],
             'calendar': [
                 { text: "📅 <b>오늘의 학사일정 (2026-01-09)</b><br>• 오늘 예정된 일정이 없습니다.", delay: 300 },
@@ -695,7 +810,7 @@
             'food': [
                 { text: "🥄 <b>오늘의 학식 (함지마루)</b>", delay: 300 },
                 { text: "🍱 <b>점심 (11:30 ~ 14:00)</b><br>- 흑미밥<br>- 순살돈까스&브라운S<br>- 로제파스타<br>- 그린샐러드", delay: 1000 },
-                { text: "🤤 맛있다 <b>124</b> | 🤮 별로다 <b>2</b>", delay: 1500 }
+                { text: "🤤 <b>오늘 메뉴 어때요?</b>", delay: 1500, reactions: ['🤤 124', '🤮 2'] }
             ]
         };
 
@@ -705,21 +820,20 @@
 
         function openChat(type) {
             modal.classList.remove('hidden');
-            // Allow animation frame to process remove hidden before adding opacity
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
                 modal.querySelector('div[class*="transform"]').classList.remove('scale-95', 'opacity-0');
                 modal.querySelector('div[class*="transform"]').classList.add('scale-100', 'opacity-100');
             }, 10);
             
-            modalChatBody.innerHTML = '<div class="text-center my-4"><span class="bg-black/20 text-white/80 text-xs px-3 py-1 rounded-full">Today</span></div>';
+            modalChatBody.innerHTML = '<div class="text-center my-4"><span class="bg-black/20 text-white/60 text-xs px-3 py-1 rounded-full">Today</span></div>';
             
             const messages = chatScenarios[type];
             if (!messages) return;
 
             messages.forEach((msg) => {
                 const timer = setTimeout(() => {
-                    const bubble = createMessageBubble(msg.text);
+                    const bubble = createBubble(msg.text, msg.reactions);
                     modalChatBody.appendChild(bubble);
                     modalChatBody.scrollTop = modalChatBody.scrollHeight;
                 }, msg.delay);
@@ -739,8 +853,8 @@
             }, 300);
         }
 
-        // Trigger demo from hero phone
-        document.getElementById('demo-trigger').addEventListener('click', () => openChat('notice'));
+        // Trigger demo from hero phone (Optional hook)
+        // document.getElementById('notification-item').addEventListener('click', () => openChat('notice'));
 
         // Mobile Menu Toggle
         function toggleMobileMenu() {
@@ -758,7 +872,7 @@
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
                 
-                const rotateX = ((y - centerY) / centerY) * -10; // Max 10deg
+                const rotateX = ((y - centerY) / centerY) * -10; 
                 const rotateY = ((x - centerX) / centerX) * 10;
 
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
@@ -769,7 +883,7 @@
             });
         });
 
-        // Navbar blur effect on scroll
+        // Navbar blur effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
             if(window.scrollY > 50) {
